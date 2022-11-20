@@ -68,6 +68,7 @@ class LendingController extends Controller
 
     public function lengthen($copy_id, $start)
     {
+        //könyv meghosszabbítása
         $user = Auth::user();
         //könyv lekérdezése
         $book = DB::table('lendings as l')
@@ -93,7 +94,7 @@ class LendingController extends Controller
 
     public function reserved($book_id)
     {
-        //van-e foglalás az adott könyvre - nem példányra, amin nincs értesítés
+        //hány db foglalás van az adott könyvre - nem példányra, amin nincs értesítés
         return DB::table('reservations as r')->where('r.message', 0)->where('r.book_id', $book_id)->count();
     }
 
