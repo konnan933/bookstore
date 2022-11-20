@@ -51,7 +51,11 @@ Route::middleware(['auth.basic'])->group(function () {
     //queries
     //user lendings
     Route::get('/api/user_lendings', [LendingController::class, 'userLendingsList']);
+    Route::get('api/more_lendings/{db}', [CopyController::class, 'more_lendings']);
     Route::get('/api/user_lendings_count', [LendingController::class, 'userLendingsCount']);
+    //Route::get('/api/lengthen/{copy}/{start}', [LendingController::class, 'lengthen']);
+    Route::patch('/api/lengthen/{copy}/{start}', [LendingController::class, 'lengthen']);
+    Route::get('api/reserved/{id}', [LendingController::class, 'reserved']);
 });
 //csak a tesztelés miatt van "kint"
 Route::patch('/api/users/password/{id}', [UserController::class, 'updatePassword']);

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date("start");
             //default null az értéke
             $table->date("end")->nullable();
+            $table->boolean('extension')->default(0);
             $table->integer('notice')->default(0);
             $table->timestamps();
         });

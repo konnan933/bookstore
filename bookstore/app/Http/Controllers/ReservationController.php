@@ -28,6 +28,7 @@ class ReservationController extends Controller
         $reservation->book_id = $request->book_id;
         $reservation->user_id = $request->user_id;
         $reservation->start = $request->start;
+        $reservation->message = $request->message;
         $reservation->save();
     }
 
@@ -37,6 +38,7 @@ class ReservationController extends Controller
         $reservation->book_id = $request->book_id;
         $reservation->user_id = $request->user_id;
         $reservation->start = $request->start;
+        $reservation->message = $request->message;
         $reservation->save();
     }
 

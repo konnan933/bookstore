@@ -27,6 +27,7 @@ class Lending extends Model
         'copy_id',
         'start',
         'end',
+        'extension',
         'notice'
     ];
 
