@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
@@ -42,4 +46,23 @@ class ReservationController extends Controller
         $reservation->save();
     }
 
+    //3 napnál régebbi előjegyzések
+    public function older($day)
+    {
+        $user = Auth::user();
+        $date = DB::table('reservations as r')->select('r.start')->get()->value('start');
+        //echo $date;
+        $start = Carbon::parse($date);
+        $current = Carbon::now();
+        $interval = $current->diffInDays($start);
+        $nagyobbE = $interval > $day;
+        echo $nagyobbE;
+        $reservations = DB::table('reservations as r')
+            ->select('r.book_id')
+            ->where('r.user_id', $user->id)
+            ->where($nagyobbE, 1)
+            ->get();
+
+        return $reservations;
+    }
 }
