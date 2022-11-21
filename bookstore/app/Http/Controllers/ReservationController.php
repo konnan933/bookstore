@@ -46,23 +46,19 @@ class ReservationController extends Controller
         $reservation->save();
     }
 
-    //3 napnál régebbi előjegyzések
+    //hány napja jegyezték elő az akt felh-hoz tartozó előjegyzéseket?
     public function older($day)
     {
         $user = Auth::user();
-        $date = DB::table('reservations as r')->select('r.start')->get()->value('start');
-        //echo $date;
-        $start = Carbon::parse($date);
-        $current = Carbon::now();
-        $interval = $current->diffInDays($start);
-        $nagyobbE = $interval > $day;
-        echo $nagyobbE;
         $reservations = DB::table('reservations as r')
-            ->select('r.book_id')
+            ->select('r.book_id', 'r.start')
             ->where('r.user_id', $user->id)
-            ->where($nagyobbE, 1)
+            ->whereRaw('DATEDIFF(CURRENT_DATE, r.start) > ?', $day)
             ->get();
 
         return $reservations;
     }
+
+    //kinek van előjegyzése:
+    // select r.user_id, count(*) from reservations r group by r.user_id having count(*) > 1
 }
