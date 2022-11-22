@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $books =  Book::all();
         return $books;
     }
-    
+
     public function show($id)
     {
         $book = Book::find($id);
@@ -37,8 +39,28 @@ class BookController extends Controller
     }
 
     public function bookCopies($title)
-    {	
-        $copies = Book::with('copy_c')->where('title','=', $title)->get();
+    {
+        $copies = Book::with('copy_c')->where('title', '=', $title)->get();
         return $copies;
+    }
+    public function bookAuthors()
+    {
+        $authors = DB::table('books')
+            ->select('author', 'title')
+            ->orderBy('author')
+            ->get();
+
+        return $authors;
+    }
+    public function bookCountAuthors()
+    {
+        $authors = DB::raw('
+        Select author, count(title)
+        from book
+        group by author
+        having count(title) > 1');
+
+
+        return $authors;
     }
 }

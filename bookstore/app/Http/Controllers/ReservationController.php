@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $reservations =  Reservation::all();
         return $reservations;
     }
 
-    public function show ($book_id, $user_id, $start)
+    public function show($book_id, $user_id, $start)
     {
         $reservation = Reservation::where('book_id', $book_id)->where('user_id', $user_id)->where('start', $start)->get();
         return $reservation[0];
@@ -46,7 +47,6 @@ class ReservationController extends Controller
         $reservation->save();
     }
 
-    //hány napja jegyezték elő az akt felh-hoz tartozó előjegyzéseket?
     public function older($day)
     {
         $user = Auth::user();
@@ -59,6 +59,15 @@ class ReservationController extends Controller
         return $reservations;
     }
 
-    //kinek van előjegyzése:
-    // select r.user_id, count(*) from reservations r group by r.user_id having count(*) > 1
+    // raw : select r.user_id, count(*) from reservations r group by r.user_id having count(*) > 1
+
+    public function elojegyzesCount()
+    {
+        $user = Auth::user();
+        $reservations = DB::table('reservations as r')
+            ->where('r.user_id', $user->id)
+            ->count();
+
+        return $reservations;
+    }
 }

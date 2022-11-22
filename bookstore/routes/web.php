@@ -27,7 +27,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 //ADMIN
-Route::middleware( ['admin'])->group(function () {
+Route::middleware(['admin'])->group(function () {
     //books
     Route::get('/api/books/{id}', [BookController::class, 'show']);
     Route::post('/api/books', [BookController::class, 'store']);
@@ -40,12 +40,12 @@ Route::middleware( ['admin'])->group(function () {
     //view - copy
     Route::get('/copy/new', [CopyController::class, 'newView']);
     Route::get('/copy/edit/{id}', [CopyController::class, 'editView']);
-    Route::get('/copy/list', [CopyController::class, 'listView']); 
+    Route::get('/copy/list', [CopyController::class, 'listView']);
 });
 
 //SIMPLE USER
 Route::middleware(['auth.basic'])->group(function () {
-    
+
     //user   
     Route::apiResource('/api/users', UserController::class);
     Route::patch('/api/users/password/{id}', [UserController::class, 'updatePassword']);
@@ -55,6 +55,8 @@ Route::middleware(['auth.basic'])->group(function () {
     Route::get('api/more_lendings/{db}', [CopyController::class, 'more_lendings']);
     Route::get('/api/user_lendings_count', [LendingController::class, 'userLendingsCount']);
     Route::get('/api/lengthen/{date}', [ReservationController::class, 'difference']);
+    //Reservations
+    Route::get('/api/user_res_count', [ReservationController::class, 'elojegyzesCount']);
     //Route::get('/api/lengthen/{copy}/{start}', [LendingController::class, 'lengthen']);
     Route::patch('/api/lengthen/{copy}/{start}', [LendingController::class, 'lengthen']);
     Route::get('api/reserved/{id}', [LendingController::class, 'reserved']);
@@ -64,11 +66,14 @@ Route::middleware(['auth.basic'])->group(function () {
 //csak a tesztelés miatt van "kint"
 Route::patch('/api/users/password/{id}', [UserController::class, 'updatePassword']);
 Route::apiResource('/api/copies', CopyController::class);
-Route::get('/api/lendings', [LendingController::class, 'index']); 
+Route::get('/api/lendings', [LendingController::class, 'index']);
 Route::get('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'show']);
 Route::put('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'update']);
 Route::patch('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'update']);
 Route::post('/api/lendings', [LendingController::class, 'store']);
 Route::delete('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'destroy']);
+//book with author
+Route::get('/api/book_authors', [BookController::class, 'bookAuthors']);
+Route::get('/api/title_count_authors', [BookController::class, 'bookCountAuthors']);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
